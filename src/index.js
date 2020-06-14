@@ -1,58 +1,27 @@
-import startOfDay from "date-fns/startOfDay";
-import subDays from "date-fns/subDays";
 import parseISO from "date-fns/parseISO";
 import differenceInDays from "date-fns/differenceInDays";
+import isSameDay from "date-fns/isSameDay";
 
 import "./styles.css";
 
-const API_URL = "https://api.carbonintensity.org.uk/generation";
-
-function hasBurnedCoal(item) {
-  const coalGeneration = item.generationmix.find((mix) => mix.fuel === "coal");
-  return coalGeneration.perc > 0;
-}
-
 async function fetchStreak() {
-  const maxDays = 60;
-
-  const to = new Date();
-  const from = subDays(to, maxDays);
-
-  const response = await fetch(
-    `${API_URL}/${from.toISOString()}/${to.toISOString()}`
-  );
+  const response = await fetch(`/api`);
   const json = await response.json();
 
-  const lastBurnedCoal = json.data.reverse().find(hasBurnedCoal);
-
-  let streakMessage;
-
-  if (lastBurnedCoal) {
-    const lastBurnedCoalDateTime = parseISO(lastBurnedCoal.to);
-    streakMessage = differenceInDays(to, lastBurnedCoalDateTime);
-  } else {
-    streakMessage = `over ${maxDays}`;
-  }
+  const streakInDays = differenceInDays(new Date(), parseISO(json.to));
 
   document.getElementById("streak").innerHTML = `
-    It has been ${streakMessage} days since the UK last burned coal.
+    It has been ${streakInDays} days since the UK last burned coal.
   `;
 }
 
 async function fetchHasBurnedToday() {
-  const to = new Date();
-  const from = startOfDay(to);
-
-  const response = await fetch(
-    `${API_URL}/${from.toISOString()}/${to.toISOString()}`
-  );
+  const response = await fetch(`/api`);
   const json = await response.json();
 
-  // check if some item in json.data has its coal generation mix percentage greater than 0
-  // means that UK has burned coal today
-  const hasBurnedFuel = json.data.some(hasBurnedCoal);
+  const hasBurnedCoal = isSameDay(new Date(), parseISO(json.to));
 
-  if (hasBurnedFuel) {
+  if (hasBurnedCoal) {
     document.getElementById("headline").innerHTML = `
       <h1>Yes</h1>
     `;
