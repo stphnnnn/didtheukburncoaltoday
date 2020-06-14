@@ -63,56 +63,5 @@ async function fetchHasBurnedToday() {
   }
 }
 
-async function fetchTodaysRenewables() {
-  const to = new Date();
-  const from = startOfDay(to);
-
-  const response = await fetch(
-    `${API_URL}/${from.toISOString()}/${to.toISOString()}`
-  );
-  const json = await response.json();
-
-  const subTotals = json.data.map((item) => {
-    const solar = item.generationmix.find((mix) => mix.fuel === "solar");
-    const wind = item.generationmix.find((mix) => mix.fuel === "wind");
-    const hydro = item.generationmix.find((mix) => mix.fuel === "hydro");
-
-    return solar.perc + wind.perc + hydro.perc;
-  });
-
-  let total = 0;
-  subTotals.forEach((subTotal) => {
-    total = total + subTotal;
-  });
-
-  const percentage = total / subTotals.length;
-
-  document.getElementById("percentage").innerHTML = `
-    Today, ${percentage.toFixed(2)}% of the U.K.'s power was renewable. 
-  `;
-}
-
 fetchHasBurnedToday();
-// fetchTodaysRenewables();
-// fetchStreak();
-
-function setDarkMode(state) {
-  root.style.setProperty("--background", state ? "black" : "white");
-  root.style.setProperty("--text", state ? "white" : "black");
-}
-
-const darkModeControl = document.querySelector("#dark-mode");
-const root = document.querySelector(":root");
-
-darkModeControl.addEventListener("change", (event) => {
-  const isChecked = event.target.checked;
-  setDarkMode(isChecked);
-});
-
-if (
-  window.matchMedia &&
-  window.matchMedia("(prefers-color-scheme: dark)").matches
-) {
-  darkModeControl.checked = true;
-  setDarkMode(true);
-}
+fetchStreak();
