@@ -4,21 +4,12 @@ import isSameDay from "date-fns/isSameDay";
 
 import "./styles.css";
 
-async function fetchStreak() {
+async function init() {
+  // Get data
   const response = await fetch(`/api`);
   const json = await response.json();
 
-  const streakInDays = differenceInDays(new Date(), parseISO(json.to));
-
-  document.getElementById("streak").innerHTML = `
-    It has been ${streakInDays} days since the UK last burned coal.
-  `;
-}
-
-async function fetchHasBurnedToday() {
-  const response = await fetch(`/api`);
-  const json = await response.json();
-
+  // Did the UK burn coal today?
   const hasBurnedCoal = isSameDay(new Date(), parseISO(json.to));
 
   if (hasBurnedCoal) {
@@ -30,7 +21,13 @@ async function fetchHasBurnedToday() {
       <h1>No</h1>
     `;
   }
+
+  // No coal streak
+  const streakInDays = differenceInDays(new Date(), parseISO(json.to));
+
+  document.getElementById("streak").innerHTML = `
+    It has been ${streakInDays} days since the UK last burned coal.
+  `;
 }
 
-fetchHasBurnedToday();
-fetchStreak();
+init();

@@ -35,6 +35,7 @@ module.exports = async (req, res) => {
     .sort({
       to: -1,
     })
+    .limit(20)
     .toArray();
 
   res.status(200).json({ timeblocks });
