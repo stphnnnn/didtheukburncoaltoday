@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "date-fns": "2.14.0",
-    "mongodb": "^3.5.9"
+    "mongodb": "^3.5.9",
+    "parcel-plugin-ogimage": "^1.2.0"
   },
   "devDependencies": {
     "@babel/core": "7.2.0",
