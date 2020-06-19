@@ -29,8 +29,8 @@ h1 {
 
 #headline {
   text-transform: uppercase;
-  font-size: min(30vw, 450px);
-  line-height: min(40vw, 600px);
+  font-size: min(30vw, 300px);
+  line-height: min(40vw, 400px);
   padding: 55px 0;
   margin-bottom: 25px;
 }
