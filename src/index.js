@@ -7,7 +7,7 @@ import "./styles.css";
 
 async function init() {
   // Get data
-  const response = await fetch(`/api`);
+  const response = await fetch(process.env.ENDPOINT || `/api`);
   const json = await response.json();
 
   // Hide spinner
@@ -23,7 +23,7 @@ async function init() {
     `;
 
     document.getElementById("streak").innerHTML = `
-      But we don’t have to! Earlier this year, <a class="blue" href="https://www.theguardian.com/business/2020/apr/28/britain-breaks-record-for-coal-free-power-generation">the UK went months in a row</a> without burning coal.
+      But we don’t have to! Earlier this year, <a class="blue" href="https://www.theguardian.com/business/2020/apr/28/britain-breaks-record-for-coal-free-power-generation">the UK went months in a row</a> without burning coal for electricity.
     `;
   } else {
     document.getElementById("headline").innerHTML = `
@@ -41,7 +41,7 @@ async function init() {
     }
 
     document.getElementById("streak").innerHTML = `
-      It has been <span class="blue">${streak}</span> since the UK last burned coal.
+      It has been <span class="blue">${streak}</span> since the UK last burned coal for electricity.
     `;
   }
 }
